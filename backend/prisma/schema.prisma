@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id         String    @id @default(uuid())
+  name       String    @db.VarChar(256)
+  email      String    @unique @db.VarChar(256)
+  password   String
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model Buyer {
+  id                 String @id @default(uuid())
+  organization_name  String @unique @db.VarChar(256)
+  organization_email String @unique @db.VarChar(256)
+  phone_no           String @db.VarChar(15)
+  password           String
+  pan_no             String @unique
+  aadhar_no          Int?
+
+  onRampTransactions OnRampTransaction[]
+  transactions       Transaction[]       @relation("Buyer_relation")
+
+  @@unique([aadhar_no])
+}
+
+model Seller {
+  id                 String @id @default(uuid())
+  organization_name  String @unique @db.VarChar(256)
+  organization_email String @unique @db.VarChar(256)
+  phone_no           String @db.VarChar(15)
+  password           String
+  pan_no             String @unique
+  aadhar_no          Int?
+
+  transactions Transaction[] @relation("Seller_relation")
+
+  @@unique([aadhar_no])
+}
+
+model Transaction {
+  id         String       @id @default(uuid())
+  status     OnRampStatus
+  amount     Int
+  start_time DateTime
+  seller_id  String
+  seller     Seller       @relation(name: "Seller_relation", fields: [seller_id], references: [id])
+  buyer_id   String
+  buyer      Buyer        @relation(name: "Buyer_relation", fields: [buyer_id], references: [id])
+}
+
+model OnRampTransaction {
+  id         String       @id @default(uuid())
+  status     OnRampStatus
+  token      String       @unique
+  provider   String
+  amount     Int
+  start_time DateTime
+  buyer_id   String
+  user       Buyer        @relation(fields: [buyer_id], references: [id])
+}
+
+enum OnRampStatus {
+  Success
+  Failure
+  Proccessing
+}

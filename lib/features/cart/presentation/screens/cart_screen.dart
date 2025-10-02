@@ -102,7 +102,7 @@ class CartScreen extends ConsumerWidget {
             Row(
               children: [
                 Text(
-                  '₹${item.listing.pricePerCredit.toStringAsFixed(0)} per credit',
+                  'EXC${item.listing.pricePerCredit.toStringAsFixed(0)} per credit',
                   style: AppTextStyles.bodyMedium,
                 ),
                 const Spacer(),
@@ -155,7 +155,7 @@ class CartScreen extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total: ₹${item.totalPrice.toStringAsFixed(0)}',
+                  'Total: EXC${item.totalPrice.toStringAsFixed(0)}',
                   style: AppTextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -217,7 +217,7 @@ class CartScreen extends ConsumerWidget {
                   style: AppTextStyles.bodyLarge,
                 ),
                 Text(
-                  '₹${cartState.subtotal.toStringAsFixed(0)}',
+                  'EXC${cartState.subtotal.toStringAsFixed(0)}',
                   style: AppTextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -233,7 +233,7 @@ class CartScreen extends ConsumerWidget {
                   style: AppTextStyles.bodyMedium,
                 ),
                 Text(
-                  '₹${cartState.tax.toStringAsFixed(0)}',
+                  'EXC${cartState.tax.toStringAsFixed(0)}',
                   style: AppTextStyles.bodyMedium,
                 ),
               ],
@@ -247,7 +247,7 @@ class CartScreen extends ConsumerWidget {
                   style: AppTextStyles.heading3,
                 ),
                 Text(
-                  '₹${cartState.total.toStringAsFixed(0)}',
+                  'EXC${cartState.total.toStringAsFixed(0)}',
                   style: AppTextStyles.heading3.copyWith(
                     color: AppColors.primary,
                   ),

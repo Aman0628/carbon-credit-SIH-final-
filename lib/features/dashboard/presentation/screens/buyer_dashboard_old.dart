@@ -7,7 +7,6 @@ import '../../../../core/theme/custom_components.dart';
 import '../../../../core/providers/auth_provider.dart';
 import '../../../tools/presentation/screens/tools_screen.dart';
 import '../../../marketplace/presentation/screens/buyer_marketplace_screen.dart';
-import '../../../portfolio/presentation/screens/portfolio_screen.dart';
 
 class BuyerDashboard extends ConsumerStatefulWidget {
   const BuyerDashboard({super.key});
@@ -23,13 +22,14 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
   int _currentTransactionIndex = 0;
   Timer? _transactionTimer;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _currentBottomNavIndex = 0;
 
   final List<Map<String, String>> _recentTransactions = [
     {
       'userName': 'Alex Johnson',
       'credits': '15 credits',
       'projectName': 'Reforestation Himachal',
-      'amount': 'EXC9,750',
+      'amount': '₹9,750',
       'time': '2 minutes ago',
       'type': 'Purchase'
     },
@@ -37,7 +37,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
       'userName': 'Maria Garcia',
       'credits': '30 credits',
       'projectName': 'Sundarbans Mangrove',
-      'amount': 'EXC21,600',
+      'amount': '₹21,600',
       'time': '5 minutes ago',
       'type': 'Purchase'
     },
@@ -45,7 +45,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
       'userName': 'Chen Wei',
       'credits': '25 credits',
       'projectName': 'Amazon Community Forestry',
-      'amount': 'EXC20,000',
+      'amount': '₹20,000',
       'time': '8 minutes ago',
       'type': 'Purchase'
     },
@@ -53,7 +53,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
       'userName': 'Sarah Ahmed',
       'credits': '40 credits',
       'projectName': 'Coastal Mangrove Protection',
-      'amount': 'EXC28,800',
+      'amount': '₹28,800',
       'time': '12 minutes ago',
       'type': 'Purchase'
     },
@@ -61,7 +61,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
       'userName': 'David Kim',
       'credits': '20 credits',
       'projectName': 'Forest Revival Project',
-      'amount': 'EXC14,000',
+      'amount': '₹14,000',
       'time': '15 minutes ago',
       'type': 'Purchase'
     },
@@ -70,7 +70,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(_handleTabSelection);
     _startTransactionTimer(); // Start timer for the initial tab
   }
@@ -112,12 +112,36 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
     final ref = this.ref;
     final authState = ref.watch(authProvider);
     final user = authState.user!;
+    
+    // Determine which content to show based on bottom nav selection
+    Widget bodyContent;
+    switch (_currentBottomNavIndex) {
+      case 0:
+        bodyContent = _buildBuyerHomeTab(user);
+        break;
+      case 1:
+        bodyContent = _buildBuyerUPITab(user);
+        break;
+      case 2:
+        bodyContent = _buildBuyerAccountTab(user);
+        break;
+      default:
+        bodyContent = _buildBuyerHomeTab(user);
+    }
+    
     return Scaffold(
       key: _scaffoldKey,
       drawer: _buildSidebar(context, ref, user),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+      bottomNavigationBar: _buildNewBottomNavigationBar(context),
       body: SafeArea(
-        child: Column(
+        child: bodyContent,
+      ),
+    );
+  }
+
+  // NEW: Buyer Home Tab Content
+  Widget _buildBuyerHomeTab(user) {
+    return Column(
           children: [
             // Modern Gradient Header
             Container(
@@ -315,6 +339,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
                 unselectedLabelStyle: AppTextStyles.bodyMedium,
                 tabs: const [
                   Tab(text: 'Explore'),
+                  Tab(text: 'Portfolio'),
                   Tab(text: 'Marketplace'),
                   Tab(text: 'Certificates'),
                   Tab(text: 'Orders'),
@@ -329,6 +354,9 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
                 children: [
                   // Explore View
                   _buildExploreView(),
+
+                  // Portfolio View
+                  _buildPortfolioView(),
 
                   // Marketplace View
                   _buildMarketplaceView(),
@@ -371,36 +399,36 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
               _buildTradedCreditCard(
                 'Sundarbans Mangrove',
                 'Coastal Conservation',
-                'EXC720/credit',
+                '₹720/credit',
                 Icons.eco,
                 () => context.push('/credit-detail', extra: {
                   'projectName': 'Sundarbans Mangrove',
                   'sellerName': 'Coastal Conservation',
-                  'price': 'EXC720/credit',
+                  'price': '₹720/credit',
                   'location': 'West Bengal, India',
                 }),
               ),
               _buildTradedCreditCard(
                 'Amazon Community Forestry',
                 'Rainforest Alliance',
-                'EXC800/credit',
+                '₹800/credit',
                 Icons.forest,
                 () => context.push('/credit-detail', extra: {
                   'projectName': 'Amazon Community Forestry',
                   'sellerName': 'Rainforest Alliance',
-                  'price': 'EXC800/credit',
+                  'price': '₹800/credit',
                   'location': 'Amazon, Brazil',
                 }),
               ),
               _buildTradedCreditCard(
                 'Reforestation Himachal',
                 'Forest Revival Co.',
-                'EXC650/credit',
+                '₹650/credit',
                 Icons.park,
                 () => context.push('/credit-detail', extra: {
                   'projectName': 'Reforestation Himachal',
                   'sellerName': 'Forest Revival Co.',
-                  'price': 'EXC650/credit',
+                  'price': '₹650/credit',
                   'location': 'Himachal Pradesh, India',
                 }),
               ),
@@ -724,9 +752,9 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
               runSpacing: 16,
               alignment: WrapAlignment.spaceAround,
               children: [
-                _buildPriceIndicator('Forestry', 'EXC720', AppColors.primary),
-                _buildPriceIndicator('Renewable', 'EXC850', AppColors.success),
-                _buildPriceIndicator('Mangrove', 'EXC680', AppColors.info),
+                _buildPriceIndicator('Forestry', '₹720', AppColors.primary),
+                _buildPriceIndicator('Renewable', '₹850', AppColors.success),
+                _buildPriceIndicator('Mangrove', '₹680', AppColors.info),
               ],
             ),
           ],
@@ -889,7 +917,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Sundarbans Mangrove Restoration',
             'West Bengal, India',
             'Coastal Conservation Foundation',
-            'EXC720/credit',
+            '₹720/credit',
             '3000 available',
             Icons.eco,
           ),
@@ -898,7 +926,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Amazon Community Forestry',
             'Amazon, Brazil',
             'Rainforest Alliance',
-            'EXC800/credit',
+            '₹800/credit',
             '5000 available',
             Icons.forest,
           ),
@@ -907,7 +935,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Reforestation Himachal',
             'Himachal Pradesh, India',
             'Forest Revival Co.',
-            'EXC650/credit',
+            '₹650/credit',
             '2000 available',
             Icons.park,
           ),
@@ -1126,7 +1154,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Purchase',
             'Sundarbans Mangrove Restoration',
             '50 credits',
-            'EXC36,000',
+            '₹36,000',
             '15 Dec 2023',
             Icons.shopping_bag,
             AppColors.success,
@@ -1136,7 +1164,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Retirement',
             'Amazon Community Forestry',
             '25 credits',
-            'EXC20,000',
+            '₹20,000',
             '10 Dec 2023',
             Icons.eco,
             AppColors.primary,
@@ -1146,7 +1174,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Purchase',
             'Reforestation Himachal',
             '75 credits',
-            'EXC48,750',
+            '₹48,750',
             '5 Dec 2023',
             Icons.shopping_bag,
             AppColors.success,
@@ -1156,7 +1184,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Transfer',
             'Forest Revival Project',
             '30 credits',
-            'EXC21,000',
+            '₹21,000',
             '1 Dec 2023',
             Icons.swap_horiz,
             AppColors.warning,
@@ -1166,7 +1194,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'Purchase',
             'Coastal Mangrove Protection',
             '100 credits',
-            'EXC72,000',
+            '₹72,000',
             '28 Nov 2023',
             Icons.shopping_bag,
             AppColors.success,
@@ -1322,7 +1350,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2024-001',
             'Sundarbans Mangrove Restoration',
             '25 credits',
-            'EXC18,000',
+            '₹18,000',
             'Pending',
             '20 Jan 2024',
             AppColors.warning,
@@ -1332,7 +1360,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2024-002',
             'Amazon Community Forestry',
             '50 credits',
-            'EXC40,000',
+            '₹40,000',
             'Processing',
             '18 Jan 2024',
             AppColors.info,
@@ -1342,7 +1370,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2023-045',
             'Reforestation Himachal',
             '30 credits',
-            'EXC19,500',
+            '₹19,500',
             'Completed',
             '15 Jan 2024',
             AppColors.success,
@@ -1352,7 +1380,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2023-044',
             'Coastal Mangrove Protection',
             '75 credits',
-            'EXC54,000',
+            '₹54,000',
             'Completed',
             '12 Jan 2024',
             AppColors.success,
@@ -1362,7 +1390,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2023-043',
             'Forest Revival Project',
             '40 credits',
-            'EXC28,000',
+            '₹28,000',
             'Completed',
             '8 Jan 2024',
             AppColors.success,
@@ -1372,7 +1400,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
             'ORD-2023-042',
             'Sundarbans Mangrove Restoration',
             '60 credits',
-            'EXC43,200',
+            '₹43,200',
             'Cancelled',
             '5 Jan 2024',
             AppColors.error,
@@ -1551,7 +1579,7 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
     );
   }
 
-  Widget _buildBottomNavigationBar(BuildContext context) {
+  Widget _buildNewBottomNavigationBar(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark 
@@ -1575,25 +1603,23 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildBottomNavItem(
+              _buildNewBottomNavItem(
                 icon: Icons.home_rounded,
                 label: 'Home',
-                onTap: () {}, // Already on home
+                isSelected: _currentBottomNavIndex == 0,
+                onTap: () => setState(() => _currentBottomNavIndex = 0),
               ),
-              _buildBottomNavItem(
-                icon: Icons.pie_chart_rounded,
-                label: 'Portfolio',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PortfolioScreen(),
-                  ),
-                ),
+              _buildNewBottomNavItem(
+                icon: Icons.account_balance_wallet_rounded,
+                label: 'UPI',
+                isSelected: _currentBottomNavIndex == 1,
+                onTap: () => setState(() => _currentBottomNavIndex = 1),
               ),
-              _buildBottomNavItem(
+              _buildNewBottomNavItem(
                 icon: Icons.person_rounded,
                 label: 'Account',
-                onTap: () => context.push('/account'),
+                isSelected: _currentBottomNavIndex == 2,
+                onTap: () => setState(() => _currentBottomNavIndex = 2),
               ),
             ],
           ),
@@ -1602,31 +1628,50 @@ class _BuyerDashboardState extends ConsumerState<BuyerDashboard>
     );
   }
 
-  Widget _buildBottomNavItem({
+  Widget _buildNewBottomNavItem({
     required IconData icon,
     required String label,
+    required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final primaryColor = const Color(0xFF2E7D32); // Green
+    
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? primaryColor.withOpacity(0.1) 
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: const Color(0xFF2E7D32),
-              size: 24,
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              child: Icon(
+                icon,
+                color: isSelected 
+                    ? primaryColor 
+                    : (isDark ? Colors.grey[400] : Colors.grey[600]),
+                size: 24,
+              ),
             ),
             const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTextStyles.caption.copyWith(
-                color: const Color(0xFF2E7D32),
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: TextStyle(
+                color: isSelected 
+                    ? primaryColor 
+                    : (isDark ? Colors.grey[400] : Colors.grey[600]),
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
+              child: Text(label),
             ),
           ],
         ),

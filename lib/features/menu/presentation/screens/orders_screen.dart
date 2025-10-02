@@ -127,7 +127,7 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen>
                 Expanded(
                   child: _buildSummaryCard(
                     'Total Amount',
-                    '₹${_getTotalAmount()}',
+                    'EXC${_getTotalAmount()}',
                     Icons.currency_rupee,
                     AppColors.success,
                   ),
@@ -293,7 +293,7 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen>
                         style: AppTextStyles.caption,
                       ),
                       Text(
-                        '₹${order['amount']}',
+                        'EXC${order['amount']}',
                         style: AppTextStyles.bodyMedium.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.primary,
@@ -408,7 +408,7 @@ class _OrdersScreenState extends ConsumerState<OrdersScreen>
               _buildDetailRow('Project', order['projectName']),
               _buildDetailRow('Seller', order['seller']),
               _buildDetailRow('Credits', '${order['credits']} credits'),
-              _buildDetailRow('Amount', '₹${order['amount']}'),
+              _buildDetailRow('Amount', 'EXC${order['amount']}'),
               _buildDetailRow('Status', order['status']),
               _buildDetailRow('Date', order['date']),
               _buildDetailRow('Type', order['type']),

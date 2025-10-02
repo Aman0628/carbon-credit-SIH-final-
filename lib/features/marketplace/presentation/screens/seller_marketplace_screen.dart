@@ -12,6 +12,14 @@ class SellerMarketplaceScreen extends ConsumerStatefulWidget {
 class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  
+  // Form controllers for creating listings
+  final _titleController = TextEditingController();
+  final _creditsController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  String _selectedStandard = 'VCS';
+  String _selectedVintage = '2023';
 
   final List<Map<String, dynamic>> _myListings = [
     {
@@ -92,7 +100,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -100,33 +108,39 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
     _tabController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Seller Marketplace'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: _showCreateListingDialog,
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'My Listings', icon: Icon(Icons.list_alt)),
-            Tab(text: 'Market Trends', icon: Icon(Icons.trending_up)),
-            Tab(text: 'Analytics', icon: Icon(Icons.analytics)),
+            Tab(text: 'Overview'),
+            Tab(text: 'My Listings'),
+            Tab(text: 'Create Listing'),
+            Tab(text: 'Market trends'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
+          _buildOverviewTab(),
           _buildMyListingsTab(),
+          _buildCreateListingTab(),
           _buildMarketTrendsTab(),
-          _buildAnalyticsTab(),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showCreateListingDialog(),
-        icon: const Icon(Icons.add),
-        label: const Text('New Listing'),
       ),
     );
   }
@@ -174,7 +188,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
               Expanded(
                 child: _buildSummaryCard(
                   'Revenue',
-                  '₹1,80,000',
+                  'EXC1,80,000',
                   Icons.account_balance_wallet,
                   AppColors.success,
                 ),
@@ -226,7 +240,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
                         style: AppTextStyles.bodyLarge,
                       ),
                       Text(
-                        '₹45.2 Cr',
+                        'EXC45.2 Cr',
                         style: AppTextStyles.heading3.copyWith(
                           color: AppColors.primary,
                         ),
@@ -296,10 +310,10 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
             children: [
               _buildAnalyticsCard(
                 'Avg. Sale Price',
-                '₹775',
+                'EXC775',
                 Icons.attach_money,
                 AppColors.success,
-                '+₹25 vs market',
+                '+EXC25 vs market',
               ),
               _buildAnalyticsCard(
                 'Conversion Rate',
@@ -449,7 +463,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
                         ),
                       ),
                       Text(
-                        '₹${listing['pricePerCredit']}/credit',
+                        'EXC${listing['pricePerCredit']}/credit',
                         style: AppTextStyles.bodyMedium,
                       ),
                     ],
@@ -460,7 +474,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '₹${listing['totalValue']}',
+                        'EXC${listing['totalValue']}',
                         style: AppTextStyles.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.primary,
@@ -533,7 +547,7 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '₹${trend['avgPrice']}',
+              'EXC${trend['avgPrice']}',
               style: AppTextStyles.bodyLarge.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -605,29 +619,247 @@ class _SellerMarketplaceScreenState extends ConsumerState<SellerMarketplaceScree
     );
   }
 
-  void _showCreateListingDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Create New Listing'),
-        content: const Text('Create listing functionality will be implemented here.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+  Widget _buildCreateListingTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Create New Credit Listing',
+            style: AppTextStyles.heading2,
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Create listing feature coming soon!')),
+          const SizedBox(height: 24),
+          
+          // Project Title
+          TextField(
+            controller: _titleController,
+            decoration: const InputDecoration(
+              labelText: 'Project Title',
+              hintText: 'e.g., Solar Farm Credits - Rajasthan',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Credits Available
+          TextField(
+            controller: _creditsController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Credits Available',
+              hintText: 'Number of credits to sell',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Price per Credit
+          TextField(
+            controller: _priceController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Price per Credit (EXC)',
+              hintText: 'Price in EXC tokens',
+              border: OutlineInputBorder(),
+              prefixText: 'EXC ',
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Standard Dropdown
+          DropdownButtonFormField<String>(
+            value: _selectedStandard,
+            decoration: const InputDecoration(
+              labelText: 'Carbon Standard',
+              border: OutlineInputBorder(),
+            ),
+            items: ['VCS', 'Gold Standard', 'CDM', 'CAR'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
               );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedStandard = newValue!;
+              });
             },
-            child: const Text('Create'),
           ),
+          const SizedBox(height: 16),
+          
+          // Vintage Year
+          DropdownButtonFormField<String>(
+            value: _selectedVintage,
+            decoration: const InputDecoration(
+              labelText: 'Vintage Year',
+              border: OutlineInputBorder(),
+            ),
+            items: ['2023', '2022', '2021', '2020'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedVintage = newValue!;
+              });
+            },
+          ),
+          const SizedBox(height: 16),
+          
+          // Description
+          TextField(
+            controller: _descriptionController,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              labelText: 'Project Description',
+              hintText: 'Describe your carbon credit project...',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 24),
+          
+          // Create Listing Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _createListing,
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: const Text('Create Listing'),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Preview Card
+          if (_titleController.text.isNotEmpty || _creditsController.text.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.divider),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Preview',
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    _titleController.text.isEmpty ? 'Project Title' : _titleController.text,
+                    style: AppTextStyles.bodyLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        '${_creditsController.text.isEmpty ? '0' : _creditsController.text} Credits',
+                        style: AppTextStyles.bodyMedium,
+                      ),
+                      const Spacer(),
+                      Text(
+                        'EXC${_priceController.text.isEmpty ? '0' : _priceController.text}/credit',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _selectedStandard,
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.success.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          _selectedVintage,
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.success,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
+  }
+
+  void _createListing() {
+    if (_titleController.text.isEmpty || 
+        _creditsController.text.isEmpty || 
+        _priceController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all required fields')),
+      );
+      return;
+    }
+    
+    // Add new listing to the list
+    setState(() {
+      _myListings.add({
+        'id': 'CC${_myListings.length + 1}'.padLeft(5, '0'),
+        'title': _titleController.text,
+        'credits': int.parse(_creditsController.text),
+        'pricePerCredit': int.parse(_priceController.text),
+        'totalValue': int.parse(_creditsController.text) * int.parse(_priceController.text),
+        'status': 'Active',
+        'views': 0,
+        'inquiries': 0,
+        'datePosted': DateTime.now().toString().substring(0, 10),
+        'validUntil': DateTime.now().add(const Duration(days: 180)).toString().substring(0, 10),
+        'standard': _selectedStandard,
+        'vintage': _selectedVintage,
+        'description': _descriptionController.text,
+      });
+    });
+    
+    // Clear form
+    _titleController.clear();
+    _creditsController.clear();
+    _priceController.clear();
+    _descriptionController.clear();
+    
+    // Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Listing created successfully!')),
+    );
+    
+    // Switch to My Listings tab
+    _tabController.animateTo(1);
+  }
+
+  void _showCreateListingDialog() {
+    // Switch to Create Listing tab
+    _tabController.animateTo(2);
   }
 
   void _editListing(Map<String, dynamic> listing) {

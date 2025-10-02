@@ -105,7 +105,7 @@ class _BuyerMarketplaceScreenState extends ConsumerState<BuyerMarketplaceScreen>
       'title': 'Mega Solar Initiative',
       'location': 'Rajasthan',
       'credits': '10,000+',
-      'price': '₹650/credit',
+      'price': 'EXC650/credit',
       'image': 'mega_solar.jpg',
       'badge': 'Featured',
     },
@@ -113,7 +113,7 @@ class _BuyerMarketplaceScreenState extends ConsumerState<BuyerMarketplaceScreen>
       'title': 'Coastal Wind Farm',
       'location': 'Tamil Nadu',
       'credits': '5,000+',
-      'price': '₹780/credit',
+      'price': 'EXC780/credit',
       'image': 'coastal_wind.jpg',
       'badge': 'New',
     },
@@ -488,7 +488,7 @@ class _BuyerMarketplaceScreenState extends ConsumerState<BuyerMarketplaceScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '₹${credit['pricePerCredit']}/credit',
+                        'EXC${credit['pricePerCredit']}/credit',
                         style: AppTextStyles.bodyLarge.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.primary,
@@ -554,7 +554,7 @@ class _BuyerMarketplaceScreenState extends ConsumerState<BuyerMarketplaceScreen>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total: ₹${credit['totalValue']}',
+                  'Total: EXC${credit['totalValue']}',
                   style: AppTextStyles.bodyLarge.copyWith(
                     fontWeight: FontWeight.bold,
                     color: AppColors.success,
@@ -746,8 +746,8 @@ class _BuyerMarketplaceScreenState extends ConsumerState<BuyerMarketplaceScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Credits: ${credit['credits']}'),
-            Text('Price per credit: ₹${credit['pricePerCredit']}'),
-            Text('Total: ₹${credit['totalValue']}'),
+            Text('Price per credit: EXC${credit['pricePerCredit']}'),
+            Text('Total: EXC${credit['totalValue']}'),
             const SizedBox(height: 16),
             const TextField(
               decoration: InputDecoration(

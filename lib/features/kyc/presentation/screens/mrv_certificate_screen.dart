@@ -58,6 +58,80 @@ class _MRVCertificateScreenState extends ConsumerState<MRVCertificateScreen> {
   }
 
   Future<void> _pickCertificateDocument() async {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Select Photo Source',
+                style: AppTextStyles.heading3,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildPhotoOption(
+                      icon: Icons.camera_alt,
+                      title: 'Take Photo',
+                      subtitle: 'Use camera to capture',
+                      onTap: () {
+                        Navigator.pop(context);
+                        _capturePhoto();
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildPhotoOption(
+                      icon: Icons.photo_library,
+                      title: 'Upload Photo',
+                      subtitle: 'Choose from gallery',
+                      onTap: () {
+                        Navigator.pop(context);
+                        _uploadPhoto();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _capturePhoto() async {
+    final XFile? document = await _picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 90,
+    );
+    
+    if (document != null) {
+      setState(() {
+        _certificateDocument = document;
+      });
+    }
+  }
+
+  Future<void> _uploadPhoto() async {
     final XFile? document = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 90,
@@ -393,19 +467,73 @@ class _MRVCertificateScreenState extends ConsumerState<MRVCertificateScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Upload Certificate Document',
+                    'Add Certificate Document',
                     style: AppTextStyles.bodyLarge.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Tap to upload PDF or image of your MRV certificate',
+                    'Take a photo or upload from gallery',
                     style: AppTextStyles.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
+      ),
+    );
+  }
+
+  Widget _buildPhotoOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.primary.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: Colors.white,
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: AppTextStyles.bodyLarge.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

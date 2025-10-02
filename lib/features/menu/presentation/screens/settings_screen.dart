@@ -19,11 +19,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _biometricAuth = false;
   bool _twoFactorAuth = true;
   String _selectedLanguage = 'English';
-  String _selectedCurrency = 'INR (₹)';
+  String _selectedCurrency = 'EXC (₹)';
   String _selectedTheme = 'System';
 
   final List<String> _languages = ['English', 'Hindi', 'Bengali', 'Tamil', 'Telugu'];
-  final List<String> _currencies = ['INR (₹)', 'USD (\$)', 'EUR (€)', 'GBP (£)'];
+  final List<String> _currencies = ['EXC (₹)', 'USD (\$)', 'EUR (€)', 'GBP (£)'];
   final List<String> _themes = ['Light', 'Dark', 'System'];
 
   @override

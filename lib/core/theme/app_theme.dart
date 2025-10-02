@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Modern vibrant color palette
-  static const Color primary = Color(0xFF00C896); // Vibrant teal-green
-  static const Color primaryDark = Color(0xFF00A67E);
-  static const Color secondary = Color(0xFF4CAF50);
-  static const Color accent = Color(0xFF6C63FF); // Purple accent
+  // Green-focused color palette
+  static const Color primary = Color(0xFF2E7D32); // Material Green 800
+  static const Color primaryDark = Color(0xFF1B5E20); // Material Green 900
+  static const Color secondary = Color(0xFF4CAF50); // Material Green 500
+  static const Color accent = Color(0xFF66BB6A); // Material Green 400
   static const Color background = Color(0xFFF8FFFE);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color error = Color(0xFFFF5252);
@@ -24,7 +24,7 @@ class AppColors {
   
   // Gradient colors
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF00C896), Color(0xFF00E5A0)],
+    colors: [Color(0xFF2E7D32), Color(0xFF4CAF50)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );

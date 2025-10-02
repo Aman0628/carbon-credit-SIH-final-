@@ -9,7 +9,6 @@ import '../../../../core/models/user.dart';
 import '../../../tools/presentation/screens/tools_screen.dart';
 import '../../../tools/presentation/screens/carbon_calculator_screen.dart' as calc;
 import '../../../tools/presentation/screens/market_news_screen.dart' as news;
-import '../../../portfolio/presentation/screens/portfolio_screen.dart';
 import 'selling_units_detail_screen.dart';
 import 'pricing_tool_screen.dart';
 import 'compliance_check_screen.dart';
@@ -36,7 +35,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
       'buyerName': 'Green Corp Ltd',
       'credits': '50 credits',
       'projectName': 'Solar Farm Maharashtra',
-      'amount': 'EXC42,500',
+      'amount': '₹42,500',
       'time': '2 minutes ago',
       'type': 'Sale'
     },
@@ -44,7 +43,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
       'buyerName': 'EcoTech Solutions',
       'credits': '25 credits',
       'projectName': 'Wind Energy Gujarat',
-      'amount': 'EXC23,000',
+      'amount': '₹23,000',
       'time': '5 minutes ago',
       'type': 'Sale'
     },
@@ -52,7 +51,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
       'buyerName': 'Sustainable Industries',
       'credits': '75 credits',
       'projectName': 'Reforestation Himachal',
-      'amount': 'EXC48,750',
+      'amount': '₹48,750',
       'time': '8 minutes ago',
       'type': 'Sale'
     },
@@ -399,7 +398,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
               Expanded(
                 child: _buildStatsCard(
                   'Monthly Revenue',
-                  'EXC2.4L',
+                  '₹2.4L',
                   Icons.trending_up,
                   AppColors.warning,
                 ),
@@ -430,7 +429,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                             style: AppTextStyles.bodyMedium,
                           ),
                           Text(
-                            'EXC775/credit',
+                            '₹775/credit',
                             style: AppTextStyles.heading3.copyWith(
                               color: AppColors.primary,
                             ),
@@ -445,7 +444,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                             style: AppTextStyles.bodyMedium,
                           ),
                           Text(
-                            'EXC800/credit',
+                            '₹800/credit',
                             style: AppTextStyles.heading3.copyWith(
                               color: AppColors.success,
                             ),
@@ -649,7 +648,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                 _buildProjectItem(
                   'Solar Farm Maharashtra',
                   'Renewable Energy • 1,500 credits',
-                  'EXC850/credit',
+                  '₹850/credit',
                   'Active',
                   AppColors.success,
                   Icons.wb_sunny,
@@ -658,7 +657,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                 _buildProjectItem(
                   'Wind Energy Gujarat',
                   'Renewable Energy • 800 credits',
-                  'EXC920/credit',
+                  '₹920/credit',
                   'Active',
                   AppColors.success,
                   Icons.air,
@@ -667,7 +666,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                 _buildProjectItem(
                   'Reforestation Himachal',
                   'Forestry • 2,000 credits',
-                  'EXC650/credit',
+                  '₹650/credit',
                   'Active',
                   AppColors.success,
                   Icons.forest,
@@ -814,13 +813,13 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
           Card(
             child: Column(
               children: [
-                _buildTrendItem('VCS Credits', 'EXC775', '+5.2%', true),
+                _buildTrendItem('VCS Credits', '₹775', '+5.2%', true),
                 const Divider(height: 1),
-                _buildTrendItem('Gold Standard', 'EXC820', '+3.8%', true),
+                _buildTrendItem('Gold Standard', '₹820', '+3.8%', true),
                 const Divider(height: 1),
-                _buildTrendItem('CDM Credits', 'EXC680', '-1.2%', false),
+                _buildTrendItem('CDM Credits', '₹680', '-1.2%', false),
                 const Divider(height: 1),
-                _buildTrendItem('CAR Credits', 'EXC790', '+2.1%', true),
+                _buildTrendItem('CAR Credits', '₹790', '+2.1%', true),
               ],
             ),
           ),
@@ -930,50 +929,52 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark 
-            ? const Color(0xFF1E1E1E) 
-            : Colors.white,
+        color: AppColors.surface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -4),
+            blurRadius: 4,
+            offset: const Offset(0, -2),
           ),
         ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
       ),
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBottomNavItem(
-                icon: Icons.home_rounded,
-                label: 'Home',
-                onTap: () {}, // Already on home
-              ),
-              _buildBottomNavItem(
-                icon: Icons.pie_chart_rounded,
-                label: 'Portfolio',
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const PortfolioScreen(),
-                  ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildBottomNavItem(
+              icon: Icons.person,
+              label: 'Account',
+              onTap: () => context.push('/account'),
+            ),
+            _buildBottomNavItem(
+              icon: Icons.account_balance_wallet,
+              label: 'Wallet',
+              onTap: () => context.push('/wallet'),
+            ),
+            _buildBottomNavItem(
+              icon: Icons.newspaper,
+              label: 'News',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const news.MarketNewsScreen(),
                 ),
               ),
-              _buildBottomNavItem(
-                icon: Icons.person_rounded,
-                label: 'Account',
-                onTap: () => context.push('/account'),
-              ),
-            ],
-          ),
+            ),
+            _buildBottomNavItem(
+              icon: Icons.payment,
+              label: 'UPI',
+              onTap: () => context.push('/payment-options'),
+            ),
+            _buildBottomNavItem(
+              icon: Icons.support_agent,
+              label: 'Support',
+              onTap: () => context.push('/contact-us'),
+            ),
+          ],
         ),
       ),
     );
@@ -987,22 +988,21 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              color: const Color(0xFF2E7D32),
-              size: 24,
+              color: AppColors.primary,
+              size: 20,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: AppTextStyles.caption.copyWith(
-                color: const Color(0xFF2E7D32),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+                fontSize: 10,
               ),
             ),
           ],
@@ -1662,7 +1662,7 @@ class _SellerDashboardState extends ConsumerState<SellerDashboard>
                       ),
                     ),
                     Text(
-                      'EXC${pricePerCredit.toStringAsFixed(0)}',
+                      '₹${pricePerCredit.toStringAsFixed(0)}',
                       style: AppTextStyles.bodyLarge.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,

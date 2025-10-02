@@ -78,7 +78,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                   ),
                                 ),
                                 Text(
-                                  '₹${item.totalPrice.toStringAsFixed(0)}',
+                                  'EXC${item.totalPrice.toStringAsFixed(0)}',
                                   style: AppTextStyles.bodyMedium.copyWith(
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -90,14 +90,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           Row(
                             children: [
                               const Expanded(child: Text('Subtotal')),
-                              Text('₹${cartState.subtotal.toStringAsFixed(0)}'),
+                              Text('EXC${cartState.subtotal.toStringAsFixed(0)}'),
                             ],
                           ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
                               const Expanded(child: Text('GST (18%)')),
-                              Text('₹${cartState.tax.toStringAsFixed(0)}'),
+                              Text('EXC${cartState.tax.toStringAsFixed(0)}'),
                             ],
                           ),
                           const Divider(),
@@ -112,7 +112,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                 ),
                               ),
                               Text(
-                                '₹${cartState.total.toStringAsFixed(0)}',
+                                'EXC${cartState.total.toStringAsFixed(0)}',
                                 style: AppTextStyles.bodyLarge.copyWith(
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.primary,
@@ -199,7 +199,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             Text('Processing...'),
                           ],
                         )
-                      : Text('Pay ₹${cartState.total.toStringAsFixed(0)}'),
+                      : Text('Pay EXC${cartState.total.toStringAsFixed(0)}'),
                 ),
               ),
             ),
@@ -304,7 +304,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         ),
                       ),
                       Text(
-                        '₹15,000 available',
+                        'EXC15,000 available',
                         style: AppTextStyles.bodyMedium.copyWith(
                           color: AppColors.success,
                         ),
@@ -344,7 +344,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Amount: ₹${result['amount'].toStringAsFixed(0)}',
+                'Amount: EXC${result['amount'].toStringAsFixed(0)}',
                 style: AppTextStyles.bodyLarge.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

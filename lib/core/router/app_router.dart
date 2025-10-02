@@ -34,6 +34,8 @@ import '../../features/dashboard/presentation/screens/create_listing_screen.dart
 import '../../features/dashboard/presentation/screens/view_analytics_screen.dart';
 import '../../features/dashboard/presentation/screens/pricing_tool_screen.dart';
 import '../../features/dashboard/presentation/screens/compliance_check_screen.dart';
+import '../../features/portfolio/presentation/screens/portfolio_screen.dart';
+import '../../features/auth/presentation/screens/profile_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -226,6 +228,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/compliance-check',
         builder: (context, state) => const ComplianceCheckScreen(),
+      ),
+      // Universal Bottom Navigation Routes
+      GoRoute(
+        path: '/portfolio',
+        builder: (context, state) => const PortfolioScreen(),
+      ),
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

@@ -1,11 +1,13 @@
 // buyer routes
 
 import express, { Request, Response } from 'express';
-import { transporter } from '../services/mailer';
 import { db } from '../db';
 import bcrypt from 'bcryptjs';
-import crypto from "crypto"
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import { transporter } from '../services/mailer';
 export const buyerRouter = express.Router();
+
 
 buyerRouter.post('/signup', async(req: Request, res: Response) => {
     const {organization_type,organization_email, organization_name, phone_no, password} = req.body;
@@ -84,11 +86,11 @@ buyerRouter.post("/verify-otp", async (req, res) => {
 
   res.json({ message: "Email verified successfully" });
 });
+
 buyerRouter.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const buyer = await db.buyer.findUnique({
-    where: { organization_email: email },
-    select: { password: true },
+    where: { organization_email: email }
   });
 
   if (!buyer) {
@@ -99,7 +101,18 @@ buyerRouter.post('/login', async (req, res) => {
     if (err || !result) {
       return res.status(401).json({ message: "Invalid password" });
     } else {
-    res.json({ message: "Logged in successfully" });
+      // Generate JWT token
+      const token = jwt.sign({ id: buyer.id, email: buyer.organization_email }, process.env.JWT_SECRET!, {
+        expiresIn: "1h",
+      });
+
+      res.cookie("auth_token", token, {
+      httpOnly: true,    // not accessible by JS
+      secure: process.env.NODE_ENV === "production", // only https in prod
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, // 1 hour
+      });
+      res.json({ message: "Logged in successfully" });
     }
 })
 })

@@ -37,10 +37,14 @@ adminRouter.post('/login', async (req, res) => {
             email: email,
         }
     });
+    if(!admin) {
+        return res.status(401).send('Unauthorized');
+    }
     bcrypt.compare(password, admin?.password, (err, result) => {
         if (err || !result) {
             return res.status(401).send('Unauthorized');
         } else {
+            
             res.send(`Admin Logged in with email: ${email}`);
         }
     });

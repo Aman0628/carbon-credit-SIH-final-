@@ -1,19 +1,11 @@
 // buyer routes
 
 import express, { Request, Response } from 'express';
-import  nodemailer  from 'nodemailer';
+import { transporter } from '../services/mailer';
 import { db } from '../db';
 import bcrypt from 'bcryptjs';
 import crypto from "crypto"
 export const buyerRouter = express.Router();
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_ADMIN,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 buyerRouter.post('/signup', async(req: Request, res: Response) => {
     const {organization_type,organization_email, organization_name, phone_no, password} = req.body;

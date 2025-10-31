@@ -34,6 +34,8 @@ model Buyer {
 
   onRampTransactions OnRampTransaction[]
   transactions       Transaction[]       @relation("Buyer_relation")
+  cartItems          CartItem[]
+  orders             Order[]
 }
 
 model Seller {
@@ -83,6 +85,55 @@ model Project {
   authority    String?
   seller_id    String
   seller       Seller  @relation(name: "Seller_relation", fields: [seller_id], references: [id])
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
+}
+
+model CartItem {
+  id         String   @id @default(uuid())
+  buyer_id   String
+  buyer      Buyer    @relation(fields: [buyer_id], references: [id], onDelete: Cascade)
+  project_id String
+  project    Project  @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  quantity   Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([buyer_id, project_id])
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  buyer_id       String
+  buyer          Buyer       @relation(fields: [buyer_id], references: [id])
+  total_amount   Float
+  total_credits  Int
+  status         OrderStatus @default(PENDING)
+  payment_method String?
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @updatedAt
+
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id              String   @id @default(uuid())
+  order_id        String
+  order           Order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  project_id      String
+  project         Project  @relation(fields: [project_id], references: [id])
+  quantity        Int
+  price_per_credit Float
+  subtotal        Float
+  created_at      DateTime @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  FAILED
 }
 
 enum OnRampStatus {

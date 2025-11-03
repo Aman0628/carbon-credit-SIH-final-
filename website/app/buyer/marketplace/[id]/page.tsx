@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import Image from 'next/image';
 import { projectApi, handleApiError } from '@/lib/api';
 
 interface Project {
@@ -34,32 +35,33 @@ export default function ProjectDetailPage() {
   const [purchaseQuantity, setPurchaseQuantity] = useState(1);
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
+    // Check if user is authenticated via API call and fetch project
+    const fetchProjectDetails = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const response = await projectApi.getById(projectId);
+        setProject(response.data.data);
+      } catch (err) {
+        setError(handleApiError(err));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (!token || userType !== 'buyer') {
-      router.push('/');
-      return;
-    }
+    const checkAuthAndFetch = async () => {
+      if (!projectId) return;
 
-    if (projectId) {
-      fetchProjectDetails();
-    }
+      try {
+        await fetchProjectDetails();
+      } catch {
+        // Not authenticated, redirect
+        router.push('/auth');
+      }
+    };
+
+    checkAuthAndFetch();
   }, [router, projectId]);
-
-  const fetchProjectDetails = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const response = await projectApi.getById(projectId);
-      setProject(response.data.data);
-    } catch (err) {
-      setError(handleApiError(err));
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handlePurchase = () => {
     // TODO: Implement purchase flow when transaction API is ready
@@ -159,10 +161,13 @@ export default function ProjectDetailPage() {
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="h-96 bg-linear-to-br from-emerald-400 to-green-500 relative">
                 {project.image_url ? (
-                  <img
+                  <Image
                     src={project.image_url}
                     alt={project.project_name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 66vw"
+                    priority
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">

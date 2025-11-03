@@ -31,42 +31,51 @@ interface DashboardStats {
   pendingVerifications: PendingUser[];
 }
 
+interface User {
+  user_id: string;
+  organization_name: string;
+  organization_email: string;
+  is_verified: boolean;
+}
+
 export default function AdminDashboard() {
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [_users, setUsers] = useState<{ buyers: any[]; sellers: any[] } | null>(
-    null
-  );
+  const [_users, setUsers] = useState<{
+    buyers: User[];
+    sellers: User[];
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [verifying, setVerifying] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
+    // Check if user is authenticated via API call
+    const checkAuth = async () => {
+      try {
+        await adminApi.getProfile();
+        // If successful, user is authenticated as admin
+        await fetchDashboardData();
+      } catch {
+        // Not authenticated or not an admin, redirect
+        router.push('/auth');
+      }
+    };
 
-    if (!token || userType !== 'admin') {
-      router.push('/');
-      return;
-    }
-
-    fetchDashboardData();
+    checkAuth();
   }, [router]);
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true);
-      setError('');
       const [statsResponse, usersResponse] = await Promise.all([
         adminApi.getDashboard(),
         adminApi.getUsers(),
       ]);
       setStats(statsResponse.data.data);
       setUsers(usersResponse.data.data);
+      setLoading(false);
     } catch (err) {
       setError(handleApiError(err));
-    } finally {
       setLoading(false);
     }
   };
@@ -88,10 +97,8 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userType');
-    localStorage.removeItem('userEmail');
-    router.push('/');
+    // Clear any client-side state if needed
+    router.push('/auth');
   };
 
   if (loading) {

@@ -39,29 +39,28 @@ export default function SellerDashboard() {
   const [_showCreateProjectModal, _setShowCreateProjectModal] = useState(false);
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
-    const email = localStorage.getItem('userEmail');
+    // Check if user is authenticated via API call
+    const checkAuth = async () => {
+      try {
+        const profileResponse = await sellerApi.getProfile();
+        setUserEmail(profileResponse.data.data.organization_email || '');
+        await fetchDashboardData();
+      } catch {
+        // Not authenticated or not a seller, redirect
+        router.push('/auth');
+      }
+    };
 
-    if (!token || userType !== 'seller') {
-      router.push('/');
-      return;
-    }
-
-    setUserEmail(email || '');
-    fetchDashboardData();
+    checkAuth();
   }, [router]);
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true);
-      setError('');
       const response = await sellerApi.getDashboard();
       setStats(response.data.data);
+      setLoading(false);
     } catch (err) {
       setError(handleApiError(err));
-    } finally {
       setLoading(false);
     }
   };
@@ -72,10 +71,8 @@ export default function SellerDashboard() {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userType');
-      localStorage.removeItem('userEmail');
-      router.push('/');
+      // Redirect to auth page (cookies will be cleared by the API)
+      router.push('/auth');
     }
   };
 

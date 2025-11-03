@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { adminApi, buyerApi, sellerApi, handleApiError } from '@/lib/api';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function ApiTestPage() {
+function ApiTestContent() {
   const searchParams = useSearchParams();
   const role = searchParams.get('role') || 'admin';
 
@@ -308,5 +308,13 @@ export default function ApiTestPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ApiTestPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ApiTestContent />
+    </Suspense>
   );
 }

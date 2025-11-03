@@ -28,29 +28,28 @@ export default function BuyerDashboard() {
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
-    const email = localStorage.getItem('userEmail');
+    // Check if user is authenticated via API call
+    const checkAuth = async () => {
+      try {
+        const profileResponse = await buyerApi.getProfile();
+        setUserEmail(profileResponse.data.data.organization_email || '');
+        await fetchDashboardData();
+      } catch {
+        // Not authenticated or not a buyer, redirect
+        router.push('/auth');
+      }
+    };
 
-    if (!token || userType !== 'buyer') {
-      router.push('/');
-      return;
-    }
-
-    setUserEmail(email || '');
-    fetchDashboardData();
+    checkAuth();
   }, [router]);
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true);
-      setError('');
       const response = await buyerApi.getDashboard();
       setStats(response.data.data);
+      setLoading(false);
     } catch (err) {
       setError(handleApiError(err));
-    } finally {
       setLoading(false);
     }
   };
@@ -61,10 +60,8 @@ export default function BuyerDashboard() {
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userType');
-      localStorage.removeItem('userEmail');
-      router.push('/');
+      // Redirect to auth page (cookies will be cleared by the API)
+      router.push('/auth');
     }
   };
 

@@ -1,49 +1,14 @@
 import Link from 'next/link';
+import Navbar from '@/components/layout/Navbar';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-teal-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-linear-to-br from-green-700 to-green-500 rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl font-bold">🌱</span>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">ECO-Ex</h1>
-                <p className="text-xs text-gray-600">
-                  Carbon Credit Marketplace
-                </p>
-              </div>
-            </div>
-            <nav className="hidden md:flex items-center space-x-6">
-              <Link
-                href="#features"
-                className="text-gray-700 hover:text-green-700 font-medium"
-              >
-                Features
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="text-gray-700 hover:text-green-700 font-medium"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="#about"
-                className="text-gray-700 hover:text-green-700 font-medium"
-              >
-                About
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      {/* Navbar */}
+      <Navbar />
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center px-4 py-2 bg-green-100 border border-green-200 rounded-full text-green-800 text-sm font-semibold mb-6">
             <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
@@ -62,9 +27,24 @@ export default function HomePage() {
             Trade verified carbon credits, offset emissions, and contribute to a
             sustainable future on India's premier carbon marketplace.
           </p>
+        </div>
+      </section>
+
+      {/* Get Started Section with Role Cards */}
+      <section id="get-started" className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Get Started Today
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Choose your role and join India's leading carbon credit
+              marketplace
+            </p>
+          </div>
 
           {/* Role Selection Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-16">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {/* Admin Card */}
             <div className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:-translate-y-2">
               <div className="absolute -top-4 -right-4 w-24 h-24 bg-linear-to-br from-green-200 to-green-100 rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -145,16 +125,10 @@ export default function HomePage() {
 
                 <div className="flex gap-3">
                   <Link
-                    href="/admin/login"
+                    href="/auth"
                     className="flex-1 px-4 py-3 bg-linear-to-r from-green-700 to-green-600 text-white rounded-xl font-semibold hover:from-green-800 hover:to-green-700 transition-all shadow-md hover:shadow-lg text-center"
                   >
-                    Login
-                  </Link>
-                  <Link
-                    href="/admin/signup"
-                    className="flex-1 px-4 py-3 border-2 border-green-700 text-green-700 rounded-xl font-semibold hover:bg-green-50 transition-all text-center"
-                  >
-                    Sign Up
+                    Get Started
                   </Link>
                 </div>
               </div>
@@ -234,16 +208,10 @@ export default function HomePage() {
 
                 <div className="flex gap-3">
                   <Link
-                    href="/buyer/login"
+                    href="/auth"
                     className="flex-1 px-4 py-3 bg-linear-to-r from-blue-600 to-blue-500 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-blue-600 transition-all shadow-md hover:shadow-lg text-center"
                   >
-                    Login
-                  </Link>
-                  <Link
-                    href="/buyer/signup"
-                    className="flex-1 px-4 py-3 border-2 border-blue-600 text-blue-600 rounded-xl font-semibold hover:bg-blue-50 transition-all text-center"
-                  >
-                    Sign Up
+                    Get Started
                   </Link>
                 </div>
               </div>
@@ -325,19 +293,72 @@ export default function HomePage() {
 
                 <div className="flex gap-3">
                   <Link
-                    href="/seller/login"
+                    href="/auth"
                     className="flex-1 px-4 py-3 bg-linear-to-r from-purple-600 to-purple-500 text-white rounded-xl font-semibold hover:from-purple-700 hover:to-purple-600 transition-all shadow-md hover:shadow-lg text-center"
                   >
-                    Login
-                  </Link>
-                  <Link
-                    href="/seller/signup"
-                    className="flex-1 px-4 py-3 border-2 border-purple-600 text-purple-600 rounded-xl font-semibold hover:bg-purple-50 transition-all text-center"
-                  >
-                    Sign Up
+                    Get Started
                   </Link>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section
+        id="how-it-works"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-green-50 to-emerald-50"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Simple, transparent, and verified carbon credit trading in three
+              steps
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-white text-2xl font-bold">1</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Register & Verify
+              </h3>
+              <p className="text-gray-600">
+                Sign up as a buyer, seller, or admin. Complete KYC verification
+                to ensure platform integrity.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-white text-2xl font-bold">2</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Browse & Trade
+              </h3>
+              <p className="text-gray-600">
+                Explore verified carbon credit projects. Buy credits to offset
+                emissions or list your projects to sell.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-white text-2xl font-bold">3</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Track & Certify
+              </h3>
+              <p className="text-gray-600">
+                Monitor your portfolio, track impact, and receive verified
+                certificates for your carbon offset.
+              </p>
             </div>
           </div>
         </div>
@@ -432,6 +453,139 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section
+        id="about"
+        className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-br from-green-50 to-emerald-50"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                About ECO-Ex
+              </h2>
+              <p className="text-lg text-gray-600 mb-4">
+                ECO-Ex is India's premier carbon credit marketplace, connecting
+                environmental project developers with organizations seeking to
+                offset their carbon footprint.
+              </p>
+              <p className="text-lg text-gray-600 mb-4">
+                We ensure all carbon credits traded on our platform are verified
+                by international standards like Gold Standard and VCS, providing
+                transparency and trust in every transaction.
+              </p>
+              <p className="text-lg text-gray-600 mb-6">
+                Join thousands of organizations making a real impact on climate
+                change through verified carbon credit trading.
+              </p>
+              <Link
+                href="/#get-started"
+                className="inline-block px-8 py-4 bg-linear-to-r from-green-700 to-green-600 text-white rounded-xl font-semibold hover:from-green-800 hover:to-green-700 transition-all shadow-md hover:shadow-lg"
+              >
+                Start Trading Today
+              </Link>
+            </div>
+            <div className="bg-white p-8 rounded-2xl shadow-xl">
+              <div className="space-y-6">
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center shrink-0">
+                    <svg
+                      className="w-6 h-6 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      100% Verified
+                    </h3>
+                    <p className="text-gray-600">
+                      All projects meet international certification standards
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
+                    <svg
+                      className="w-6 h-6 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Secure Trading
+                    </h3>
+                    <p className="text-gray-600">
+                      Bank-grade security for all transactions
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
+                    <svg
+                      className="w-6 h-6 text-purple-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      Real Impact
+                    </h3>
+                    <p className="text-gray-600">
+                      Track your environmental contribution in real-time
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-r from-green-700 to-emerald-600">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to Make a Difference?
+          </h2>
+          <p className="text-xl text-green-100 mb-8">
+            Join ECO-Ex today and start your journey towards carbon neutrality
+          </p>
+          <Link
+            href="/#get-started"
+            className="inline-block px-10 py-4 bg-white text-green-700 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl"
+          >
+            Get Started Now
+          </Link>
         </div>
       </section>
 

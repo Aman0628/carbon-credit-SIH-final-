@@ -20,7 +20,7 @@ export interface ApiError {
   }>;
 }
 
-export interface ApiSuccessResponse<T = any> {
+export interface ApiSuccessResponse<T = unknown> {
   success: true;
   message: string;
   data: T;
@@ -29,10 +29,10 @@ export interface ApiSuccessResponse<T = any> {
 export interface ApiErrorResponse {
   success: false;
   message: string;
-  errors?: any;
+  errors?: Record<string, unknown>;
 }
 
-export type ApiResponse<T = any> = ApiSuccessResponse<T> | ApiErrorResponse;
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 export type Role = 'admin' | 'buyer' | 'seller';
 

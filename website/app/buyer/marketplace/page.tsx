@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { projectApi, handleApiError } from '@/lib/api';
 
 interface Project {
@@ -28,16 +29,18 @@ export default function BuyerMarketplacePage() {
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const userType = localStorage.getItem('userType');
+    // Check if user is authenticated via API call
+    const checkAuth = async () => {
+      try {
+        await projectApi.getAll();
+        await fetchProjects();
+      } catch {
+        // Not authenticated, redirect
+        router.push('/auth');
+      }
+    };
 
-    if (!token || userType !== 'buyer') {
-      router.push('/');
-      return;
-    }
-
-    fetchProjects();
+    checkAuth();
   }, [router]);
 
   useEffect(() => {
@@ -289,10 +292,12 @@ export default function BuyerMarketplacePage() {
                 {/* Project Image */}
                 <div className="h-48 bg-linear-to-br from-emerald-400 to-green-500 relative overflow-hidden">
                   {project.image_url ? (
-                    <img
+                    <Image
                       src={project.image_url}
                       alt={project.project_name}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">

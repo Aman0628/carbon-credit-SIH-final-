@@ -4,9 +4,25 @@ import { useState, useEffect } from 'react';
 import { sellerApi, handleApiError } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 
+interface SellerProfile {
+  seller_id: string;
+  organization_name: string;
+  organization_email: string;
+  phone_no: string;
+  pan_no: string;
+  aadhar_no: string;
+  certificate_standard?: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+  is_verified: boolean;
+}
+
 export default function SellerProfilePage() {
   const router = useRouter();
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<SellerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -327,9 +343,9 @@ export default function SellerProfilePage() {
                   Verified
                 </label>
                 <p
-                  className={`font-semibold ${profile?.isVerified ? 'text-green-600' : 'text-red-600'}`}
+                  className={`font-semibold ${profile?.is_verified ? 'text-green-600' : 'text-red-600'}`}
                 >
-                  {profile?.isVerified ? 'Yes' : 'No'}
+                  {profile?.is_verified ? 'Yes' : 'No'}
                 </p>
               </div>
             </div>
